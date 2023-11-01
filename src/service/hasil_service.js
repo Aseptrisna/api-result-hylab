@@ -1,10 +1,25 @@
 const models = require("../model/hasil_model");
 const { requestResponse, getRndInteger } = require("../util");
 
-const getData = async (data) => {
+const getData = async (page,limit) => {
   try {
-    const datahasil = await models.find().sort({_id: -1 })
-    return (response = { ...requestResponse.success, datahasil });
+    const condition = {
+      limit: limit,
+      page: page,
+    };
+    const datahasil = await models
+      .find()
+      .sort({ _id: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await models.find().countDocuments();
+    return (response = {
+      ...requestResponse.success,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      datahasil,
+    });
   } catch (error) {
     console.log(error);
     return (response = { ...requestResponse.failed });
