@@ -117,8 +117,11 @@ const getDataLog = async (page, limit, date) => {
       today.setHours(0, 0, 0, 0);
       startDate = new Date(today);
       endDate = new Date(today);
-      endDate.setDate(today.getDate() + 1);
+      endDate.setHours(23, 59, 59, 999);
     }
+
+    console.log("Start Date:", startDate);
+    console.log("End Date:", endDate);
 
     const query = {
       createdAt: {
@@ -127,6 +130,7 @@ const getDataLog = async (page, limit, date) => {
       }
     };
 
+    // console.log(query);
     const dataLogs = await LogModel.find(query)
       .sort({ timestamp: -1 })
       .skip((page - 1) * limit)
