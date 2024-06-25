@@ -3,6 +3,10 @@ const fs = require(`fs`);
 const mongoose = require("mongoose");
 const Logger = require("../util/logger");
 
+const privateKey = fs.readFileSync(process.env.KEY_PEM, "utf8");
+const certificate = fs.readFileSync(process.env.CERT_PEM, "utf8");
+const ca = fs.readFileSync(process.env.CERT_PEM, "utf8");
+
 const Connection = async () => {
   try {
     mongoose.set("strictQuery", true);
@@ -14,9 +18,11 @@ const Connection = async () => {
 };
 
 const credentials = {
-  pfx: fs.readFileSync(process.env.PFX_FILE),
+  rejectUnauthorized: true,
+  key: privateKey,
+  cert: certificate,
   passphrase: process.env.PFX_PASSPHRASE,
-  ca: fs.readFileSync(process.env.INTERCERT_FILE),
+  ca: ca,
 };
 
 module.exports = {
