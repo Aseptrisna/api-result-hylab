@@ -30,6 +30,6 @@ const dataSchema = new mongoose.Schema({
 });
 
 // Membuat model "Data" dari skema "dataSchema"
-const Data = mongoose.model('history', dataSchema);
+const Data = mongoose.model('logDataCamera', dataSchema);
 
 module.exports = Data;

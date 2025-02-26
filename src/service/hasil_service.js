@@ -124,7 +124,7 @@ const getDataLog = async (page, limit, date) => {
     console.log("End Date:", endDate);
 
     const query = {
-      createdAt: {
+      create_at: {
         $gte: startDate.getTime(),
         $lte: endDate.getTime()
       }
@@ -136,6 +136,7 @@ const getDataLog = async (page, limit, date) => {
       .skip((page - 1) * limit)
       .limit(limit);
 
+      console.log(query)
     const count = await LogModel.countDocuments(query);
 
     return {
