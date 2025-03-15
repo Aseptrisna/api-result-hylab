@@ -2,6 +2,7 @@ const Data = require("../model/hasil_model");
 const models = require("../model/hasil_model");
 const { requestResponse } = require("../util");
 const LogModel = require("../model/log_model");
+const moment = require('moment-timezone');
 
 const getData = async (page, limit, date) => {
   try {
@@ -100,6 +101,47 @@ const getData = async (page, limit, date) => {
   }
 };
 
+
+
+
+const getDataByDate = async (page, limit, date) => {
+  console.log("Memulai pencarian data...");
+
+  try {
+    page = Number(page);
+    limit = Number(limit);
+
+    if (!date || !/^\d{2}-\d{2}-\d{4}$/.test(date)) {
+      return { success: false, message: "Tanggal harus dalam format DD-MM-YYYY", code: 400 };
+    }
+
+    // Ambil semua data tanpa filter
+    const [result, totalCount] = await Promise.all([
+      Data.find()
+        .sort({ datetime: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
+      Data.countDocuments(),
+    ]);
+
+    console.log("Data ditemukan:", result.length);
+
+    return {
+      ...requestResponse.success,
+      totalPages: Math.ceil(totalCount / limit),
+      currentPage: page,
+      data: result,
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error.stack);
+    return {
+      ...requestResponse.failed,
+      message: "Terjadi kesalahan saat mengambil data",
+      code: 500,
+    };
+  }
+};
+
 const getDataLog = async (page, limit, date) => {
   console.log(date)
   try {
@@ -172,7 +214,8 @@ const getDataByID = async (id) => {
 module.exports = {
   getData,
   getDataByID,
-  getDataLog
+  getDataLog,
+  getDataByDate
 };
 
 

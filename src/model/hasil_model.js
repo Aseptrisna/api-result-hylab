@@ -1,25 +1,42 @@
 const mongoose = require("mongoose");
 
-// Skema untuk model data
 const dataSchema = new mongoose.Schema(
   {
-    name: {
+    guid: {
       type: String,
+      required: true,
     },
-    time: {
-      type: Date,
+    guid_device: {
       type: String,
+      required: true,
     },
-    file_name: {
+    image_name: {
       type: String,
+      required: true,
+    },
+    ai_image_name: {
+      type: String,
+      required: true,
+    },
+    num_faces: {
+      type: Number,
+      required: true,
+    },
+    timestamp: {
+      type: String,
+      required: true,
+    },
+    datetime: {
+      type: String,
+      required: true,
     },
   },
   {
+    timestamps: true, // Aktifkan createdAt dan updatedAt
     versionKey: false,
   }
 );
 
-// Membuat model "Data" dari skema "dataSchema"
 const Data = mongoose.model("datahasil", dataSchema);
 
 module.exports = Data;

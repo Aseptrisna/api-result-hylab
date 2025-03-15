@@ -6,8 +6,10 @@ const { requestResponse } = require("../util");
 const getData = async (req, res) => {
   const { page, limit } = req.params;
   const { date } = req.query;
+  // console.log(date);
   try {
-    const service = await Service.getData(page, limit, date);
+    const service = await Service.getDataByDate(page, limit, date);
+    // console.log(service);
     response = { ...service };
   } catch (error) {
     response = { ...requestResponse.server_error };
